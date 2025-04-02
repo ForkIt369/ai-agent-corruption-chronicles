@@ -1,0 +1,296 @@
+/* Landing Page Styles */
+
+.landingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.landingContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(0, 166, 237, 0.15) 0%, rgba(0, 166, 237, 0) 20%),
+    radial-gradient(circle at 80% 70%, rgba(255, 90, 140, 0.15) 0%, rgba(255, 90, 140, 0) 20%),
+    radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.1) 0%, rgba(138, 43, 226, 0) 40%);
+  background-size: 100% 100%;
+  z-index: 0;
+}
+
+.titleContainer {
+  text-align: center;
+  margin-bottom: 3rem;
+  z-index: 1;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #00A6ED, #8A2BE2, #FF5A8C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #d1d1e0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.optionsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+}
+
+.option {
+  flex: 1;
+  max-width: 500px;
+  height: 500px;
+  border-radius: 20px;
+  padding: 2rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.leftOption::before {
+  background: linear-gradient(135deg, #003366 0%, #006699 100%);
+}
+
+.rightOption::before {
+  background: linear-gradient(135deg, #660033 0%, #990033 100%);
+}
+
+.option:hover::before {
+  opacity: 1;
+}
+
+.option.active::before {
+  opacity: 1;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.optionContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  z-index: 1;
+}
+
+.optionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.optionDescription {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.characterContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.characterAlith, .characterCAlith {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.characterAlith {
+  background: linear-gradient(135deg, #00A6ED 0%, #0077B6 100%);
+  box-shadow: 0 0 30px rgba(0, 166, 237, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.characterAlith::after {
+  content: 'A';
+}
+
+.characterCAlith {
+  background: linear-gradient(135deg, #FF5A8C 0%, #C71F5C 100%);
+  box-shadow: 0 0 30px rgba(255, 90, 140, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.characterCAlith::after {
+  content: 'C';
+}
+
+.characterGlow {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.7;
+  animation: pulse 3s infinite alternate;
+}
+
+.characterAlith .characterGlow {
+  background: radial-gradient(circle, rgba(0, 166, 237, 0.5) 0%, rgba(0, 166, 237, 0) 70%);
+}
+
+.characterCAlith .characterGlow {
+  background: radial-gradient(circle, rgba(255, 90, 140, 0.5) 0%, rgba(255, 90, 140, 0) 70%);
+}
+
+.optionButton {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.leftOption .optionButton {
+  background-color: #00A6ED;
+  color: white;
+}
+
+.rightOption .optionButton {
+  background-color: #FF5A8C;
+  color: white;
+}
+
+.orb {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #8A2BE2;
+  box-shadow: 0 0 30px rgba(138, 43, 226, 0.7);
+  z-index: 2;
+}
+
+.footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: #d1d1e0;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .optionsContainer {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .option {
+    max-width: 100%;
+    height: 400px;
+  }
+  
+  .orb {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .optionTitle {
+    font-size: 1.8rem;
+  }
+  
+  .characterAlith, .characterCAlith {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .landingContainer {
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .option {
+    height: 350px;
+    padding: 1.5rem;
+  }
+}
