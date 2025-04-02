@@ -15,6 +15,7 @@ export default function GalleryPage() {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Initialize incidents on component mount
   useEffect(() => {
@@ -61,9 +62,49 @@ export default function GalleryPage() {
 
   // Generate a unique image for an incident using Fal.ai
   const generateIncidentImage = async (incident) => {
-    // This would be implemented to call the Fal.ai API
-    // For now, we'll just show a placeholder
-    console.log('Would generate image for:', incident.title);
+    if (!incident.imagePrompt) {
+      console.error('No image prompt available for incident:', incident.title);
+      return;
+    }
+
+    // Show generating indicator
+    setIsGenerating(true);
+
+    try {
+      const { generateImage } = await import('../../api/fal');
+      const result = await generateImage(incident.imagePrompt);
+      
+      if (result.success && result.imageUrl) {
+        // Create a new image element to replace the current one
+        const imageElement = document.querySelector(`.${styles.modalGalleryImage}`);
+        if (imageElement) {
+          // Save the original image URL in case we need to revert
+          const originalSrc = imageElement.src;
+          
+          // Update the image source
+          imageElement.src = result.imageUrl;
+          
+          // Handle loading error (revert to original if it fails)
+          imageElement.onerror = () => {
+            console.error('Failed to load generated image');
+            imageElement.src = originalSrc;
+          };
+          
+          // Show the image and hide the placeholder
+          imageElement.style.display = 'block';
+          const placeholder = document.querySelector(`.${styles.modalPlaceholderImage}`);
+          if (placeholder) {
+            placeholder.style.display = 'none';
+          }
+        }
+      } else {
+        console.error('Image generation failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Error generating image:', error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -119,10 +160,24 @@ export default function GalleryPage() {
           >
             <div className={styles.incidentImageContainer}>
               <div className={styles.incidentImage}>
-                {/* This would be replaced with an actual image */}
-                <div className={styles.placeholderImage} style={{ 
-                  backgroundColor: `hsl(${index * 20}, 70%, 60%)` 
-                }}>
+                {/* Try to load the image, fallback to placeholder on error */}
+                <img 
+                  src={`https://corruptchronicles.com/gallery-images/${incident.id}.jpg`} 
+                  alt={incident.title}
+                  className={styles.galleryImage}
+                  onError={(e) => {
+                    // Hide the image and show the placeholder on error
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div 
+                  className={styles.placeholderImage} 
+                  style={{ 
+                    backgroundColor: `hsl(${index * 20}, 70%, 60%)`,
+                    display: 'none' // Hidden by default
+                  }}
+                >
                   <span>{incident.title.charAt(0)}</span>
                 </div>
               </div>
@@ -175,16 +230,30 @@ export default function GalleryPage() {
             <div className={styles.modalBody}>
               <div className={styles.modalImageContainer}>
                 <div className={styles.modalImage}>
-                  {/* This would be replaced with an actual image */}
-                  <div className={styles.modalPlaceholderImage}>
+                  {/* Try to load the image, fallback to placeholder on error */}
+                  <img 
+                    src={`https://corruptchronicles.com/gallery-images/${selectedIncident.id}.jpg`} 
+                    alt={selectedIncident.title}
+                    className={styles.modalGalleryImage}
+                    onError={(e) => {
+                      // Hide the image and show the placeholder on error
+                      e.target.style.display = 'none';
+                      e.target.nextElementSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div 
+                    className={styles.modalPlaceholderImage}
+                    style={{ display: 'none' }} // Hidden by default
+                  >
                     <span>{selectedIncident.title.charAt(0)}</span>
                   </div>
                 </div>
                 <button 
                   className={styles.generateImageButton}
                   onClick={() => generateIncidentImage(selectedIncident)}
+                  disabled={isGenerating}
                 >
-                  Generate New Image
+                  {isGenerating ? 'Generating...' : 'Generate New Image'}
                 </button>
               </div>
               
